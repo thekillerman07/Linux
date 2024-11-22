@@ -1,0 +1,151 @@
+1. Update de server
+
+Zorg dat je server up-to-date is:
+
+sudo apt update && sudo apt upgrade -y
+
+
+---
+
+2. Installeer Apache2
+
+Voer het volgende commando uit om Apache2 te installeren:
+
+sudo apt install apache2 -y
+
+Controleer of Apache2 draait:
+
+sudo systemctl status apache2
+
+
+---
+
+3. Installeer MySQL-server
+
+Installeer MySQL:
+
+sudo apt install mysql-server -y
+
+Beveilig de MySQL-installatie:
+
+sudo mysql_secure_installation
+
+Tijdens dit proces wordt gevraagd om een root-wachtwoord in te stellen en enkele beveiligingsopties te configureren. Volg de prompts.
+
+
+---
+
+4. Maak een database aan voor WordPress
+
+Log in op MySQL:
+
+sudo mysql -u root -p
+
+Voer de volgende SQL-commando's uit om een database en gebruiker aan te maken (vervang wordpress_db, wordpress_user, en secure_password door je eigen namen/wachtwoord):
+
+CREATE DATABASE wordpress_db;
+CREATE USER 'wordpress_user'@'localhost' IDENTIFIED BY 'secure_password';
+GRANT ALL PRIVILEGES ON wordpress_db.* TO 'wordpress_user'@'localhost';
+FLUSH PRIVILEGES;
+EXIT;
+
+
+---
+
+5. Installeer PHP en vereiste modules
+
+WordPress vereist PHP en enkele extensies:
+
+sudo apt install php libapache2-mod-php php-mysql php-cli php-curl php-gd php-mbstring php-xml php-xmlrpc php-zip -y
+
+Herstart Apache om PHP te activeren:
+
+sudo systemctl restart apache2
+
+
+---
+
+6. Download en configureer WordPress
+
+Ga naar de webroot:
+
+cd /var/www/html
+
+Download WordPress:
+
+sudo wget https://wordpress.org/latest.tar.gz
+
+Pak het bestand uit:
+
+sudo tar -xvzf latest.tar.gz
+sudo mv wordpress/* .
+sudo rm -rf wordpress latest.tar.gz
+
+Zorg dat Apache de juiste rechten heeft:
+
+sudo chown -R www-data:www-data /var/www/html
+sudo chmod -R 755 /var/www/html
+
+
+---
+
+7. Configureer WordPress
+
+Maak het configuratiebestand aan:
+
+sudo cp wp-config-sample.php wp-config.php
+
+Bewerk het bestand:
+
+sudo nano wp-config.php
+
+Voeg je databasegegevens toe:
+
+define('DB_NAME', 'wordpress_db');
+define('DB_USER', 'wordpress_user');
+define('DB_PASSWORD', 'secure_password');
+define('DB_HOST', 'localhost');
+
+Sla de wijzigingen op (Ctrl+O, Enter, Ctrl+X).
+
+
+---
+
+8. Installeer en configureer FTP (optioneel)
+
+Installeer vsftpd:
+
+sudo apt install vsftpd -y
+
+Open de configuratie:
+
+sudo nano /etc/vsftpd.conf
+
+Zorg dat de volgende regels zijn ingesteld:
+
+write_enable=YES
+local_umask=022
+chroot_local_user=YES
+
+Herstart de FTP-server:
+
+sudo systemctl restart vsftpd
+
+Maak een FTP-gebruiker aan (bijvoorbeeld ftpuser):
+
+sudo adduser ftpuser
+
+Stel de juiste rechten in:
+
+sudo chown -R ftpuser:www-data /var/www/html
+
+
+---
+
+9. Voltooi WordPress-installatie via de browser
+
+Open je browser en ga naar:
+
+http://<je-server-ip>
+
+Volg de installatie-instructies om WordPress in te stellen.
