@@ -1,0 +1,20 @@
+Stap 1: Configureer een automatisch update systeem
+
+1a. Dagelijkse update controle via cronjob
+
+Open de crontab voor de root-gebruiker:
+
+sudo crontab -e
+
+Voeg de volgende regel toe om dagelijks om middernacht updates te controleren:
+
+0 0 * * * apt update -y
+
+
+1b. Eens per week updates upgraden op zondagochtend
+
+Voeg deze regel toe om zondagochtend om 3 uur updates te installeren:
+
+0 3 * * 0 apt upgrade -y
+
+
