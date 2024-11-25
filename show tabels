@@ -1,0 +1,28 @@
+1. Selecteer de gewenste database (indien niet al actief):
+
+USE database_naam;
+
+Vervang database_naam door de naam van de database waarin je de tabellen wilt bekijken.
+
+
+2. Toon alle tabellen:
+
+SHOW TABLES;
+
+
+
+Voorbeeld
+
+USE wordpress_db;
+SHOW TABLES;
+
+Dit zal een lijst van alle tabellen in de database wordpress_db weergeven, zoals:
+
++-----------------------+
+| Tables_in_wordpress_db|
++-----------------------+
+| wp_posts             |
+| wp_users             |
+| wp_options           |
+| wp_comments          |
++-----------------------+
